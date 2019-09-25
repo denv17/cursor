@@ -61,6 +61,11 @@ const onNextButton = () => {
   }
 }
 
+// this function display the next carousel item
+const clickPrevButton = () => {
+
+}
+
 // check whether the user hover/leave a carousel controls
 prevButton.addEventListener('mouseenter', onPrevButton);
 prevButton.addEventListener('mouseleave', onPrevButton);
