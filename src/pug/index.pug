@@ -11,18 +11,21 @@ html(lang="en")
 
     // Content
     .wrapper
-      .carousel
+      .carousel#carousel
         .carousel-content
-          .carousel-item
+          .carousel-item.active
             img(src="../assets/images/n2.jpg", alt="")
+            span 1
           .carousel-item
-            img(src="../assets/images/n2.jpg", alt="")
-          .carousel-item.active.left
             img(src="../assets/images/n4.jpg", alt="")
+            span 2
           .carousel-item
             img(src="../assets/images/n2.jpg", alt="")
+            span 3
+          .carousel-item
+            img(src="../assets/images/n4.jpg", alt="")
+            span 4
 
         .carousel-controls
           .carousel-controls-prev(role="button")
           .carousel-controls-next(role="button")
-

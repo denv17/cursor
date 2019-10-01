@@ -35,6 +35,12 @@ Array.prototype.forEach.call(links, link => link.addEventListener('mouseenter', 
 Array.prototype.forEach.call(links, link => link.addEventListener('mouseleave', enableAnimation));
 
 // Carousel
+// get carousel
+const carousel = document.querySelector('.carousel');
+
+// get carousel items
+const carouselItems = document.querySelectorAll('.carousel-item');
+
 // get prev and next button
 const prevButton = document.querySelector('.carousel-controls-prev');
 const nextButton = document.querySelector('.carousel-controls-next');
@@ -61,9 +67,17 @@ const onNextButton = () => {
   }
 }
 
-// this function display the next carousel item
-const clickPrevButton = () => {
+// this function display the prev carousel item
+const clickPrevButton = () => prevCarouselItem();
 
+// this function display the next carousel item
+const clickNextButton = () => nextCarouselItem();
+
+// this function ....
+const goToSlide = n => {
+  carouselItems[currentCarouselItem].className = 'carousel-item';
+  currentCarouselItem = (n+carouselItems.length)%carouselItems.length;
+  carouselItems[currentCarouselItem].className = 'carousel-item active';
 }
 
 // check whether the user hover/leave a carousel controls
@@ -75,3 +89,34 @@ nextButton.addEventListener('mouseleave', onNextButton);
 // check whether the user click a carousel controls
 prevButton.addEventListener('click', clickPrevButton, false);
 nextButton.addEventListener('click', clickNextButton, false);
+
+// test
+var currentCarouselItem = 0;
+//var carouselInterval = setInterval(nextCarouselItem,4000);
+
+function nextCarouselItem() {
+  goToSlide(currentCarouselItem+1);
+}
+
+function prevCarouselItem() {
+  goToSlide(currentCarouselItem-1);
+}
+
+// swipe
+let touchstartX = 0;
+let touchendX = 0;
+
+// this function ...
+function handleGesure() {
+  if (touchendX < touchstartX) prevCarouselItem();
+  if (touchendX > touchstartX) nextCarouselItem();
+}
+
+carousel.addEventListener('touchstart', e => {
+  touchstartX = e.changedTouches[0].screenX;
+})
+
+carousel.addEventListener('touchend', e => {
+  touchendX = e.changedTouches[0].screenX;
+  handleGesure();
+})
