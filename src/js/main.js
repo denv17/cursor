@@ -47,13 +47,11 @@ const prevButton = document.querySelector('.carousel-controls-prev');
 const nextButton = document.querySelector('.carousel-controls-next');
 
 // variable for the current item
-let currentCarouselItem = 0;
+let currentCarouselIndex = 0;
 
 // variables for touch events
 let touchstartX = 0;
 let touchendX = 0;
-
-//const carouselInterval = setInterval(nextCarouselItem,4000);
 
 // this function turn on/off the prev button cursor
 const onPrevButton = () => {
@@ -79,42 +77,45 @@ const onNextButton = () => {
 
 // this function go to carousel item
 const goToCarouselItem = n => {
-  if(carouselItems[currentCarouselItem].classList.contains('left')) {
-    carouselItems[currentCarouselItem].classList.remove('left');
+
+  if(carouselItems[currentCarouselIndex].classList.contains('left')) {
+    carouselItems[currentCarouselIndex].classList.remove('left');
   }
 
-  if(carouselItems[currentCarouselItem].classList.contains('right')) {
-    carouselItems[currentCarouselItem].classList.remove('right');
+  if(carouselItems[currentCarouselIndex].classList.contains('right')) {
+    carouselItems[currentCarouselIndex].classList.remove('right');
   }
 
   setTimeout( () => {
-    carouselItems[currentCarouselItem].classList.remove('active');
-    currentCarouselItem = (n+carouselItems.length)%carouselItems.length;
-    carouselItems[currentCarouselItem].classList.add('active');
+    carouselItems[currentCarouselIndex].classList.remove('active');
+    currentCarouselIndex = (n+carouselItems.length)%carouselItems.length;
+    carouselItems[currentCarouselIndex].classList.add('active');
   }, 300);
 }
 
 // this function display the prev carousel item
 const prevCarouselItem = () => {
-  carouselItems[currentCarouselItem].querySelector('.overlay').style.right = '';
-  carouselItems[currentCarouselItem].querySelector('.overlay').style.left = '0';
+  carouselItems[currentCarouselIndex].querySelector('.overlay').style.right = '';
+  carouselItems[currentCarouselIndex].querySelector('.overlay').style.left = '0';
 
-  goToCarouselItem(currentCarouselItem-1);
+  goToCarouselItem(currentCarouselIndex-1);
 
   setTimeout( () => {
-    carouselItems[currentCarouselItem].classList.add('right');
+    carouselItems[currentCarouselIndex].querySelector('.overlay').style.left = '';
+    carouselItems[currentCarouselIndex].querySelector('.overlay').style.right = '0';
+    carouselItems[currentCarouselIndex].classList.add('right');
   }, 305);
 };
 
 // this function display the next carousel item
 const nextCarouselItem = () => {
-  carouselItems[currentCarouselItem].querySelector('.overlay').style.left = '';
-  carouselItems[currentCarouselItem].querySelector('.overlay').style.right = '0';
+  carouselItems[currentCarouselIndex].querySelector('.overlay').style.left = '';
+  carouselItems[currentCarouselIndex].querySelector('.overlay').style.right = '0';
 
-  goToCarouselItem(currentCarouselItem+1);
+  goToCarouselItem(currentCarouselIndex+1);
 
   setTimeout( () => {
-    carouselItems[currentCarouselItem].classList.add('left');
+    carouselItems[currentCarouselIndex].classList.add('left');
   }, 305);
 };
 
@@ -137,9 +138,9 @@ nextButton.addEventListener('click', nextCarouselItem, false);
 // check whether the user swipe a carousel
 carousel.addEventListener('touchstart', e => {
   touchstartX = e.changedTouches[0].screenX;
-})
+});
 
 carousel.addEventListener('touchend', e => {
   touchendX = e.changedTouches[0].screenX;
   handleGesure();
-})
+});
