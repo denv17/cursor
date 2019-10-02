@@ -1,2 +1,1 @@
-# cursor
-Custom cursor slider
+# Custom cursor slider
