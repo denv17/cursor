@@ -13,7 +13,8 @@ const moveMouse = e => {
   let x = e.clientX;
   let y = e.clientY;
 
-  cursor.style.transform = `translate(${x - 15}px, ${y - 15}px`;
+  cursor.style.top = `${y - 15}px`;
+  cursor.style.left = `${x - 15}px`;
 }
 
 // this function turn on/off the animation
@@ -45,6 +46,15 @@ const carouselItems = document.querySelectorAll('.carousel-item');
 const prevButton = document.querySelector('.carousel-controls-prev');
 const nextButton = document.querySelector('.carousel-controls-next');
 
+// variable for the current item
+let currentCarouselItem = 0;
+
+// variables for touch events
+let touchstartX = 0;
+let touchendX = 0;
+
+//const carouselInterval = setInterval(nextCarouselItem,4000);
+
 // this function turn on/off the prev button cursor
 const onPrevButton = () => {
   const hasPrevClass = cursor.classList.contains('prev');
@@ -67,17 +77,51 @@ const onNextButton = () => {
   }
 }
 
+// this function go to carousel item
+const goToCarouselItem = n => {
+  if(carouselItems[currentCarouselItem].classList.contains('left')) {
+    carouselItems[currentCarouselItem].classList.remove('left');
+  }
+
+  if(carouselItems[currentCarouselItem].classList.contains('right')) {
+    carouselItems[currentCarouselItem].classList.remove('right');
+  }
+
+  setTimeout( () => {
+    carouselItems[currentCarouselItem].classList.remove('active');
+    currentCarouselItem = (n+carouselItems.length)%carouselItems.length;
+    carouselItems[currentCarouselItem].classList.add('active');
+  }, 300);
+}
+
 // this function display the prev carousel item
-const clickPrevButton = () => prevCarouselItem();
+const prevCarouselItem = () => {
+  carouselItems[currentCarouselItem].querySelector('.overlay').style.right = '';
+  carouselItems[currentCarouselItem].querySelector('.overlay').style.left = '0';
+
+  goToCarouselItem(currentCarouselItem-1);
+
+  setTimeout( () => {
+    carouselItems[currentCarouselItem].classList.add('right');
+  }, 305);
+};
 
 // this function display the next carousel item
-const clickNextButton = () => nextCarouselItem();
+const nextCarouselItem = () => {
+  carouselItems[currentCarouselItem].querySelector('.overlay').style.left = '';
+  carouselItems[currentCarouselItem].querySelector('.overlay').style.right = '0';
 
-// this function ....
-const goToSlide = n => {
-  carouselItems[currentCarouselItem].className = 'carousel-item';
-  currentCarouselItem = (n+carouselItems.length)%carouselItems.length;
-  carouselItems[currentCarouselItem].className = 'carousel-item active';
+  goToCarouselItem(currentCarouselItem+1);
+
+  setTimeout( () => {
+    carouselItems[currentCarouselItem].classList.add('left');
+  }, 305);
+};
+
+// this function display the prev/next carousel item according to the swipe
+const handleGesure = () => {
+  if (touchendX > touchstartX) prevCarouselItem();
+  if (touchendX < touchstartX) nextCarouselItem();
 }
 
 // check whether the user hover/leave a carousel controls
@@ -87,31 +131,10 @@ nextButton.addEventListener('mouseenter', onNextButton);
 nextButton.addEventListener('mouseleave', onNextButton);
 
 // check whether the user click a carousel controls
-prevButton.addEventListener('click', clickPrevButton, false);
-nextButton.addEventListener('click', clickNextButton, false);
+prevButton.addEventListener('click', prevCarouselItem, false);
+nextButton.addEventListener('click', nextCarouselItem, false);
 
-// test
-var currentCarouselItem = 0;
-//var carouselInterval = setInterval(nextCarouselItem,4000);
-
-function nextCarouselItem() {
-  goToSlide(currentCarouselItem+1);
-}
-
-function prevCarouselItem() {
-  goToSlide(currentCarouselItem-1);
-}
-
-// swipe
-let touchstartX = 0;
-let touchendX = 0;
-
-// this function ...
-function handleGesure() {
-  if (touchendX < touchstartX) prevCarouselItem();
-  if (touchendX > touchstartX) nextCarouselItem();
-}
-
+// check whether the user swipe a carousel
 carousel.addEventListener('touchstart', e => {
   touchstartX = e.changedTouches[0].screenX;
 })

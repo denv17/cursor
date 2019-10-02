@@ -30,7 +30,7 @@ body {
 
 $font-family-base: 'OpenSans';
 
-$brand: #00b5e6;
+$brand: #002fa7;
 $black: #000;
 $white: #fff;
 
@@ -56,16 +56,13 @@ body {
     top: 0;
     left: 0;
 
-    &::before {
-      content: none;
+    .overlay {
       width: 100%;
       height: 100%;
       position: absolute;
       top: 0;
-      left: 0;
-      right: 0;
       background-color: lighten($brand, 50%);
-      transition: width .7s ease;
+      transition: width .5s ease;
     }
 
     img {
@@ -80,18 +77,21 @@ body {
       left: 10px;
     }
 
-    &.left {
-      &::before {
+    &.left,
+    &.right {
+      .overlay {
         width: 0;
+      }
+    }
+
+    &.left {
+      .overlay {
         left: 0;
-        right: inherit;
       }
     }
 
     &.right {
-      &::before {
-        width: 0;
-        left: inherit;
+      .overlay {
         right: 0;
       }
     }
@@ -133,6 +133,22 @@ body {
   @media (pointer: coarse) {
     display: none;
   }
+
+  &.prev,
+  &.next {
+    border-radius: 0;
+    border-width: 6px;
+    border-left-color: transparent;
+    border-bottom-color: transparent;
+  }
+
+  &.prev {
+    transform: rotate(-135deg);
+  }
+
+  &.next {
+    transform: rotate(45deg);
+  }
 }
 
 .bounce {
@@ -147,14 +163,6 @@ body {
     border: 5px solid hsla(176, 68%, 64%, .525);
     animation: flow 1.4s ease infinite;
   }
-}
-
-.prev {
-  border: 3px solid red;
-}
-
-.next {
-  border: 3px solid blue;
 }
 
 @keyframes flow {
